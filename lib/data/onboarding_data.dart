@@ -19,7 +19,7 @@ List<OnboardingContent> contentList = [
     title: 'Welcome to Hostelite',
     description:
         'Effortlessly find and book the perfect student accommodation that suits your needs.',
-    backgroundColor: const Color(0xffF0CF69),
+   backgroundColor: const Color(0xff95B6FF),
   ),
   OnboardingContent(
     imagePath: 'assets/images/onboarding_images/onboarding-2.png',
@@ -33,6 +33,6 @@ List<OnboardingContent> contentList = [
     title: 'Simplify Your Stay',
     description:
         'Easily manage your bookings and enjoy a stress-free accommodation experience with Hostelite.',
-    backgroundColor: const Color(0xff95B6FF),
+    backgroundColor: const Color(0xffF0CF69),
   ),
 ];

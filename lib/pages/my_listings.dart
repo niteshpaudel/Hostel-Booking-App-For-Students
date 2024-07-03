@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:project_hostelite/pages/listing_details_page.dart';
+import 'package:project_hostelite/pages/user_profile.dart';
 import 'package:project_hostelite/theme/colors.dart';
-import 'package:project_hostelite/utils/routes.dart';
 import 'package:project_hostelite/widgets/general_widgets.dart';
 import 'package:project_hostelite/widgets/property_details.dart';
 import 'package:quickalert/models/quickalert_type.dart';
@@ -42,7 +42,10 @@ class _MyListingsPageState extends State<MyListingsPage> {
             size: 22,
           ),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const UserProfilePage()));
           },
         ),
       ),
@@ -68,6 +71,9 @@ class ListingsList extends StatelessWidget {
           .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const ListTile();
+        }
         if (snapshot.hasError) {
           return const Center(child: Text('Error fetching listings.'));
         }
@@ -97,9 +103,7 @@ class ListingsList extends StatelessWidget {
                   .get(),
               builder: (context, userSnapshot) {
                 if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return const ListTile(
-                    title: Text('Loading...'),
-                  );
+                  return const ListTile();
                 }
 
                 final userData =

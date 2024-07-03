@@ -142,9 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         builder: (context, userSnapshot) {
                           if (userSnapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return const ListTile(
-                              title: Text('Loading...'),
-                            );
+                            return const ListTile();
                           }
 
                           final userData =
@@ -194,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Text(
-                                    '\$${data['price']}',
+                                    '₹${data['price']}',
                                     style: TextStyle(
                                       overflow: TextOverflow.ellipsis,
                                       color: primaryBlue,
@@ -259,7 +257,7 @@ class FeaturedListings extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Find the best room\nin your budget!',
+                        'FIND THE BEST ROOM\nIN YOUR BUDGET!',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20,

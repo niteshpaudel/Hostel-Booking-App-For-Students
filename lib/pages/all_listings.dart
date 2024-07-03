@@ -70,9 +70,9 @@ class ListingsList extends StatelessWidget {
           itemCount: listings.length,
           itemBuilder: (context, index) {
             final listing = listings[index];
-            final data = listing.data() as Map<String, dynamic>;
+            final data = listing.data() as Map<String, dynamic>?;
 
-            if (data.isEmpty) {
+            if (data == null || data.isEmpty) {
               return const ListTile(
                 title: Text('No data available'),
               );
@@ -88,8 +88,20 @@ class ListingsList extends StatelessWidget {
                   return const ListTile();
                 }
 
+                if (!userSnapshot.hasData || userSnapshot.data == null) {
+                  return const ListTile(
+                    title: Text('User data not found'),
+                  );
+                }
+
                 final userData =
-                    userSnapshot.data!.data() as Map<String, dynamic>;
+                    userSnapshot.data!.data() as Map<String, dynamic>?;
+
+                if (userData == null) {
+                  return const ListTile(
+                    title: Text('User data not found'),
+                  );
+                }
 
                 return GestureDetector(
                   child: propertyDetailsCard(data, userId, listing.id,

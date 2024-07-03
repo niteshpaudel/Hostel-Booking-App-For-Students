@@ -40,7 +40,11 @@ class ChatListPage extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: primaryBlue,
+              ),
+            );
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
@@ -64,6 +68,13 @@ class ChatListPage extends StatelessWidget {
                     .doc(otherUserId)
                     .get(),
                 builder: (context, userSnapshot) {
+                  if (userSnapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.transparent,
+                      ),
+                    );
+                  }
                   if (!userSnapshot.hasData) {
                     return const ListTile();
                   }

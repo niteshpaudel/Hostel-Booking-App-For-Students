@@ -39,10 +39,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .collection('users')
           .doc(user.uid)
           .get();
-      final userData = userDoc.data() as Map<String, dynamic>;
-      _usernameController.text = userData['name'] ?? '';
-      _phoneController.text = userData['phone'] ?? '';
-      _profileImageUrl = userData['profileImageUrl'] ?? '';
+      final userData = userDoc.data() as Map<String, dynamic>?;
+      if (userData != null) {
+        _usernameController.text = userData['name'] ?? '';
+        _phoneController.text = userData['phone'] ?? '';
+        _profileImageUrl = userData['profileImageUrl'] ?? '';
+      }
       setState(() {
         isLoading = false;
       });
@@ -87,10 +89,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
           .update({
         'name': username,
         'phone': phone,
-        if (profileImageUrl != null)
-          'profileImageUrl': profileImageUrl
-        else
-          'profileImageUrl': null,
+        if (profileImageUrl != null) 'profileImageUrl': profileImageUrl,
       });
 
       if (!mounted) return;
@@ -129,6 +128,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
       _profileImage = null;
       _profileImageUrl = null;
     });
+  }
+
+  Future<void> _deleteSubcollections(DocumentReference docRef) async {
+    // Add the subcollection names here
+    List<String> subcollections = ['messages'];
+
+    for (var subcollectionName in subcollections) {
+      CollectionReference subcollectionRef =
+          docRef.collection(subcollectionName);
+      QuerySnapshot subcollectionSnapshot = await subcollectionRef.get();
+
+      for (var doc in subcollectionSnapshot.docs) {
+        await doc.reference.delete();
+      }
+    }
   }
 
   Future<void> _deleteAccount() async {
@@ -180,40 +194,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             ),
           );
-          await user.delete();
 
-          // QuerySnapshot listingSnapshot = await FirebaseFirestore.instance
-          //     .collection('listings')
-          //     .where('userId', isEqualTo: user.uid)
-          //     .get();
-
-          // for (DocumentSnapshot listingDoc in listingSnapshot.docs) {
-
-          //   List<String> storagePaths =
-          //       List<String>.from(listingDoc['imageUrls']);
-          //   await Future.forEach(storagePaths, (storagePath) async {
-          //     await FirebaseStorage.instance.ref().child(storagePath).delete();
-          //   await listingDoc.reference.delete();
-          //   });
-          // }
-
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .delete();
-
+          // Delete user's chats
           QuerySnapshot chatSnapshot = await FirebaseFirestore.instance
               .collection('chats')
               .where('participants', arrayContains: user.uid)
               .get();
 
           for (DocumentSnapshot chatDoc in chatSnapshot.docs) {
+            await _deleteSubcollections(chatDoc.reference);
             await chatDoc.reference.delete();
-            if (!mounted) return;
-            Navigator.pop(context);
-
-            Navigator.pushReplacementNamed(context, AppRoutes.authRoute);
           }
+
+          // Delete user's listings
+          QuerySnapshot listingSnapshot = await FirebaseFirestore.instance
+              .collection('listings')
+              .where('userId', isEqualTo: user.uid)
+              .get();
+
+          for (DocumentSnapshot listingDoc in listingSnapshot.docs) {
+            await listingDoc.reference.delete();
+          }
+
+          // Delete user document
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .delete();
+
+          await user.delete();
+
+          if (!mounted) return;
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, AppRoutes.authRoute);
         } catch (e) {
           if (!mounted) return;
           showSnackBar(context, 'Error deleting account!');
