@@ -75,7 +75,8 @@ class ChatListPage extends StatelessWidget {
                       ),
                     );
                   }
-                  if (!userSnapshot.hasData) {
+                  if (!userSnapshot.hasData ||
+                      userSnapshot.data!.data() == null) {
                     return const ListTile();
                   }
 

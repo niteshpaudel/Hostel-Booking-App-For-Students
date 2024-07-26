@@ -131,7 +131,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _deleteSubcollections(DocumentReference docRef) async {
-    // Add the subcollection names here
+
     List<String> subcollections = ['messages'];
 
     for (var subcollectionName in subcollections) {

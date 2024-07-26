@@ -19,6 +19,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String _phone = '';
   String _email = '';
   String? _profileImageUrl;
+  bool _isAdmin = false;
 
   @override
   void initState() {
@@ -40,6 +41,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
         _email = user.email ?? '';
         _profileImageUrl = userData['profileImageUrl'];
       });
+
+      final DocumentSnapshot adminDoc = await FirebaseFirestore.instance
+          .collection('admin')
+          .doc('admin-email')
+          .get();
+      final adminData = adminDoc.data() as Map<String, dynamic>;
+      if (adminData['adminEmail'] == _email) {
+        setState(() {
+          _isAdmin = true;
+        });
+      }
     }
   }
 
@@ -238,6 +250,40 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     ],
                   ),
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (_isAdmin)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacementNamed(
+                          context, AppRoutes.reportedListingsRoute);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 45,
+                          height: 45,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.orangeAccent,
+                          ),
+                          child: const Icon(
+                            Iconsax.warning_2,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 25,
+                        ),
+                        const Text(
+                          'Reports',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
               ],
             ),
           ],

@@ -10,6 +10,7 @@ import 'listing_details_page.dart';
 
 class AllListingsPage extends StatelessWidget {
   const AllListingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +50,7 @@ class ListingsList extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('listings')
-          .orderBy('timestamp', descending: true)
+          .where('availability', isEqualTo: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

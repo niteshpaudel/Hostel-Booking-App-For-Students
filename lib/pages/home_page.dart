@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:project_hostelite/pages/all_listings.dart';
 import 'package:project_hostelite/pages/chat_list.dart';
@@ -18,11 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String location = 'SELECT LOCATION';
-  String searchQuery = '';
-  List<DocumentSnapshot> searchResults = [];
-  bool isSearching = false;
-
   int currentScreen = 0;
   List<Widget> screens = const [
     HomeScreen(),

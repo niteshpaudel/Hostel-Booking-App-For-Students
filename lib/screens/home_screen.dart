@@ -260,7 +260,7 @@ class FeaturedListings extends StatelessWidget {
                         'FIND THE BEST ROOM\nIN YOUR BUDGET!',
                         style: TextStyle(
                             color: Colors.white,
-                            fontSize: 20,
+                            fontSize: 18,
                             fontWeight: FontWeight.w600),
                       )
                     ],
@@ -284,11 +284,6 @@ class FeaturedListings extends StatelessWidget {
           height: 250,
           child: ListingsListView(),
         ),
-        // const SectionTitle(title: "Near Your Area"),
-        // const SizedBox(
-        //   height: 250,
-        //   child: ListingsListView(),
-        // ),
       ],
     );
   }
@@ -319,7 +314,10 @@ class ListingsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('listings').snapshots(),
+      stream: FirebaseFirestore.instance
+          .collection('listings')
+          .where('availability', isEqualTo: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(

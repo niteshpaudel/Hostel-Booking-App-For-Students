@@ -16,7 +16,8 @@ class EditListingPage extends StatefulWidget {
   final Map<String, dynamic> data;
   final String listingId;
 
-  const EditListingPage({super.key, required this.data, required this.listingId});
+  const EditListingPage(
+      {super.key, required this.data, required this.listingId});
 
   @override
   State<EditListingPage> createState() => _EditListingPageState();
@@ -31,6 +32,7 @@ class _EditListingPageState extends State<EditListingPage> {
   final List<File> _localImages = [];
   final ImagePicker _picker = ImagePicker();
   bool _isUploading = false;
+  bool _availability = true; // Add this line to hold the availability status
 
   @override
   void initState() {
@@ -43,6 +45,8 @@ class _EditListingPageState extends State<EditListingPage> {
     _imageUrls.addAll((widget.data['imageUrls'] as List)
         .map((url) => url.toString())
         .toList());
+    _availability =
+        widget.data['availability'] ?? true; // Initialize availability
   }
 
   Future<List<String>> _uploadImages() async {
@@ -101,6 +105,7 @@ class _EditListingPageState extends State<EditListingPage> {
         'imageUrls': allImageUrls,
         'userId': user!.uid,
         'timestamp': FieldValue.serverTimestamp(),
+        'availability': _availability,
       });
 
       if (!mounted) return;
@@ -123,7 +128,7 @@ class _EditListingPageState extends State<EditListingPage> {
       _descriptionController.clear();
       _landmarkController.clear();
     } catch (e) {
-      showSnackBar(context, 'Error updating details: $e');
+      showSnackBar(context, 'Error updating details!');
     } finally {
       setState(() {
         _isUploading = false;
@@ -252,6 +257,59 @@ class _EditListingPageState extends State<EditListingPage> {
                             ),
                             cursorColor: primaryBlue,
                           ),
+                        ),
+                        const SizedBox(height: 35),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Available?',
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black87),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: RadioListTile<bool>(
+                                title: const Text('Yes'),
+                                value: true,
+                                activeColor: primaryBlue,
+                                groupValue: _availability,
+                                tileColor: primaryBlue.withOpacity(0.2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _availability = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: RadioListTile<bool>(
+                                title: const Text('No'),
+                                value: false,
+                                activeColor: primaryBlue,
+                                groupValue: _availability,
+                                tileColor: primaryBlue.withOpacity(0.2),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _availability = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 30),
                         const Align(

@@ -101,6 +101,60 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
       }
     }
 
+    Future<void> reportListing() async {
+      final currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null) {
+        await FirebaseFirestore.instance.collection('reported').add({
+          'listingId': widget.listing.id,
+          'reportedBy': currentUser.uid,
+          'listingOwnerId': data['userId'],
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+        if (!context.mounted) return;
+        showSnackBar(context, 'Listing reported successfully!');
+      } else {
+        showSnackBar(context, 'You need to be logged in to report a listing.');
+      }
+    }
+
+    void showReportDialog() {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text(
+              'Confirm Report',
+              style: TextStyle(fontSize: 18),
+            ),
+            content:
+                const Text('Are you sure you want to report this listing?'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Cancel',
+                  style: TextStyle(color: primaryBlue),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  reportListing();
+                },
+                child: Text(
+                  'Report',
+                  style: TextStyle(color: primaryBlue),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final renderBox = context.findRenderObject() as RenderBox;
       final size = renderBox.size;
@@ -134,6 +188,13 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            onPressed: showReportDialog,
+            icon: const Icon(Iconsax.flag, color: Colors.red),
+            tooltip: 'Report Listing',
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
@@ -420,7 +481,7 @@ class _ListingDetailsPageState extends State<ListingDetailsPage> {
                 child: Text(
                   _isDescriptionExpanded ? 'Show Less' : 'Show More',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                     color: primaryBlue,
                   ),
                 ),

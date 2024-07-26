@@ -94,6 +94,7 @@ class _UploadPageState extends State<UploadPage> {
           'landmarklc': landmark.toLowerCase(),
           'imageUrls': imageUrls,
           'userId': user!.uid,
+          'availability': true,
           'timestamp': FieldValue.serverTimestamp(),
         },
       );
@@ -119,7 +120,7 @@ class _UploadPageState extends State<UploadPage> {
     } catch (e) {
       showSnackBar(
         context,
-        'Error uploading details: $e',
+        'Error uploading details!',
       );
     } finally {
       setState(() {

@@ -4,8 +4,10 @@ import 'package:project_hostelite/pages/forgot_password_page.dart';
 import 'package:project_hostelite/pages/home_page.dart';
 import 'package:project_hostelite/pages/login_page.dart';
 import 'package:project_hostelite/pages/my_listings.dart';
+import 'package:project_hostelite/pages/reported_listings.dart';
 import 'package:project_hostelite/pages/sign_up_page.dart';
 import 'package:project_hostelite/pages/upload_page.dart';
+import 'package:project_hostelite/pages/user_profile.dart';
 import 'package:project_hostelite/screens/onboarding_screen.dart';
 import 'package:project_hostelite/screens/splash_screen.dart';
 import 'package:project_hostelite/utils/routes.dart';
@@ -41,6 +43,8 @@ class MyApp extends StatelessWidget {
         AppRoutes.uploadPageRoute: (context) => const UploadPage(),
         AppRoutes.homeRoute: (context) => const HomePage(),
         AppRoutes.myListingsRoute: (context) => const MyListingsPage(),
+        AppRoutes.reportedListingsRoute: (context) => const ReportedListings(),
+        AppRoutes.userProfileRoute: (context) => const UserProfilePage(),
       },
     );
   }

@@ -9,5 +9,6 @@ class AppRoutes {
   static String uploadPageRoute = "/upload";
   static String uploadImagePageRoute = "/uploadImage";
   static String myListingsRoute = "/myListings";
-  static const String emailVerificationRoute = '/emailVerification';
+  static String reportedListingsRoute = '/reportedListings';
+  static String userProfileRoute = '/userProfile';
 }

@@ -95,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         alignment:
                             isMe ? Alignment.centerRight : Alignment.centerLeft,
                         child: Container(
-                          padding: const EdgeInsets.fromLTRB(14.0, 10, 14, 10),
+                          padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
                           decoration: BoxDecoration(
                             color: isMe
                                 ? primaryBlue
