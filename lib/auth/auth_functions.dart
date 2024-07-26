@@ -8,26 +8,26 @@ import 'package:project_hostelite/utils/routes.dart';
 import 'package:project_hostelite/widgets/general_widgets.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 final _auth = FirebaseAuth.instance;
 
 //sign in with google (currently not in use)
-class SignInWithGoogle {
-  static Future<UserCredential> signInWithGoogle() async {
-    final googleAccount = await GoogleSignIn().signIn();
-    final googleAuth = await googleAccount?.authentication;
-    final auth = FirebaseAuth.instance;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+// class SignInWithGoogle {
+//   static Future<UserCredential> signInWithGoogle() async {
+//     final googleAccount = await GoogleSignIn().signIn();
+//     final googleAuth = await googleAccount?.authentication;
+//     final auth = FirebaseAuth.instance;
+//     final credential = GoogleAuthProvider.credential(
+//       accessToken: googleAuth?.accessToken,
+//       idToken: googleAuth?.idToken,
+//     );
 
-    final userCredential = await auth.signInWithCredential(credential);
+//     final userCredential = await auth.signInWithCredential(credential);
 
-    return userCredential;
-  }
-}
+//     return userCredential;
+//   }
+// }
 
 //login with email and password
 Future<void> login(
@@ -70,43 +70,31 @@ Future<void> login(
       );
     }
   }
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setBool('isLoggedIn', true);
 }
 
-void showErrorMessage(BuildContext context) {
-  QuickAlert.show(
-    context: context,
-    type: QuickAlertType.error,
-    title: 'Login Failed!',
-    text: 'Invalid E-mail & Password Combination',
-    showConfirmBtn: false,
-  );
-}
-
-Future<void> authenticateWithGoogle(BuildContext context) async {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (context) {
-      return Center(
-        child: CircularProgressIndicator(
-          color: primaryBlue,
-        ),
-      );
-    },
-  );
-  await GoogleSignIn().signOut();
-  try {
-    await SignInWithGoogle.signInWithGoogle();
-    if (!context.mounted) return;
-    Navigator.pop(context);
-  } catch (e) {
-    if (!context.mounted) return;
-    showSnackBar(context, 'An error occured!');
-    return;
-  }
-}
+// Future<void> authenticateWithGoogle(BuildContext context) async {
+//   showDialog(
+//     context: context,
+//     barrierDismissible: false,
+//     builder: (context) {
+//       return Center(
+//         child: CircularProgressIndicator(
+//           color: primaryBlue,
+//         ),
+//       );
+//     },
+//   );
+//   await GoogleSignIn().signOut();
+//   try {
+//     await SignInWithGoogle.signInWithGoogle();
+//     if (!context.mounted) return;
+//     Navigator.pop(context);
+//   } catch (e) {
+//     if (!context.mounted) return;
+//     showSnackBar(context, 'An error occured!');
+//     return;
+//   }
+// }
 
 Future<void> resetPassword(BuildContext context,
     {required String email}) async {

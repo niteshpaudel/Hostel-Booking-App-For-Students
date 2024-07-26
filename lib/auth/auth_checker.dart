@@ -104,7 +104,7 @@ class _AuthenticateUserState extends State<AuthenticateUser> {
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-            return _isLoggedIn ? const LoginPage() : const OnboardingScreen();
+            return _isLoggedIn? const LoginPage() : const OnboardingScreen();
           }
         },
       ),

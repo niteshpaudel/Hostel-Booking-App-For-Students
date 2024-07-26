@@ -77,7 +77,7 @@ class _UploadPageState extends State<UploadPage> {
       showSnackBar(context, 'Location must be within 80 characters!');
       return;
     }
-    if (landmark.length > 60) {
+    if (landmark.length > 80) {
       showSnackBar(context, 'Landmark must be within 60 characters!');
       return;
     }

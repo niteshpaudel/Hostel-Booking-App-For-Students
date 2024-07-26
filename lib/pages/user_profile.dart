@@ -18,6 +18,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   String _username = '';
   String _phone = '';
   String _email = '';
+  String? _role;
   String? _profileImageUrl;
   bool _isAdmin = false;
 
@@ -40,6 +41,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         _phone = userData['phone'] ?? '';
         _email = user.email ?? '';
         _profileImageUrl = userData['profileImageUrl'];
+        userData['role'] != null ? _role = userData['role'] : _role == null;
       });
 
       final DocumentSnapshot adminDoc = await FirebaseFirestore.instance
@@ -253,7 +255,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 const SizedBox(
                   height: 10,
                 ),
-                if (_isAdmin)
+                if (_isAdmin || _role == 'moderator')
                   GestureDetector(
                     onTap: () {
                       Navigator.pushReplacementNamed(

@@ -220,7 +220,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 )
               else if (searchQuery.isEmpty)
-                const FeaturedListings(),
+                const FeaturedListings()
+              else if (searchResults.isEmpty)
+                const Column(children: [
+                  SizedBox(
+                    height: 60,
+                  ),
+                  Text(
+                    'No Listings Found!',
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                  ),
+                ]),
             ],
           ),
         ),

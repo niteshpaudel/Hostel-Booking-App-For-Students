@@ -51,6 +51,7 @@ class ListingsList extends StatelessWidget {
       stream: FirebaseFirestore.instance
           .collection('listings')
           .where('availability', isEqualTo: true)
+          .orderBy('timestamp', descending: true)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
